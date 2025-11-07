@@ -3,9 +3,9 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
+  previewFeatures = ["driverAdapters"]
   output   = "../src/generated/prisma"
 }
 
@@ -13,8 +13,6 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url  	    = env("DATABASE_URL")
-  // uncomment next line if you use Prisma <5.10
-  // directUrl = env("DATABASE_URL_UNPOOLED")
 }
 model Profile  {
   id String @id @default(uuid())
@@ -22,8 +20,9 @@ model Profile  {
   name String
   imageUrl String @db.Text // used for long string 
   email String @db.Text
-  servers Server[] // 1 Person can create many Servers
-  members Member[] // 1 Person can have many members record 
+  servers Server[] // 1 Profile can create many Servers
+  channel Channel[] // 1 Profile can join many channels of that Server
+  members Member[] // 1 Profile can have many members record in each server
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -32,7 +31,8 @@ model Server {
   name String
   image String @db.Text
   inviteCode String @db.Text
-  members Member[] // 1 Server can contain many Person
+  members Member[] // 1 Server can contain many Profile
+  channels Channel[] // 1 Server can contain many Channels
   profileId String
   profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
@@ -51,5 +51,26 @@ model Member {
   profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   serverId String
   server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   @@index([profileId])
+  @@index([serverId])
+}
+enum ChannelType {
+  TEXT
+  AUDIO
+  VIDEO
+}
+model Channel {
+  id String @id @default(uuid())
+  name String
+  type ChannelType @default(TEXT)
+  profileId String
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  serverId String
+  server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([profileId])
+  @@index([serverId])
 }
