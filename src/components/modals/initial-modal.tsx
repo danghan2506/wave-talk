@@ -1,0 +1,59 @@
+"use client"
+import { Dialog, DialogDescription, DialogHeader,DialogContent, DialogTitle, DialogFooter } from "../ui/dialog"
+import { useForm } from "react-hook-form"
+import {zodResolver} from "@hookform/resolvers/zod"
+import { ServerFormData, serverFormSchema } from "@/validation/form-schema"
+import { Input } from "../ui/input"
+import { Button } from "../ui/button"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
+const InitialModal = () => {
+    const serverForm = useForm({
+        resolver: zodResolver(serverFormSchema),
+        defaultValues: {
+            name: "",
+            imageUrl: "",
+        }
+    })
+    const isLoading = serverForm.formState.isSubmitting
+    const onSubmit = async (values: ServerFormData ) => {
+        console.log(values)
+    }
+  return (
+    <Dialog open>
+        <DialogContent className="bg-white text-black p-0 overvlow-hidden">
+            <DialogHeader className="pt-8 px-6">
+                <DialogTitle className="text-2xl text-center font-bold">
+                    Customize your server
+                </DialogTitle>
+                <DialogDescription className="text-neutral-500 text-center">
+                    Give your server a personality with a name and an image.You can always change it later.
+                </DialogDescription>
+            </DialogHeader>
+            <Form {...serverForm}>
+                <form onSubmit={serverForm.handleSubmit(onSubmit)} className="space-y-8">
+                    <div className="space-y-8 px-6">
+                        <div className="felx items-center justify-center"></div>
+                        <FormField control={serverForm.control} name="name" render={({field}) => (
+                        <FormItem>
+                            <FormLabel className="uppercase text-xs font-bold text-neutral-500 dark:text-secondary/70">
+                                Server name
+                            </FormLabel>
+                            <FormControl>
+                                <Input disabled={isLoading} className="bg-neutral-500/30 border-0 focus-visible::ring-0 text-black focus-visible:ring-offset-0" placeholder="Enter server name" {...field}/>
+                                
+                            </FormControl>
+                            <FormMessage/>
+                        </FormItem>
+                    )}/>
+                    </div>
+                    <DialogFooter className="bg-gra-100 px-6 py-4">
+                        <Button variant={"primary"} disabled={isLoading}>Create</Button>
+                    </DialogFooter>
+                </form>
+            </Form>
+        </DialogContent>
+    </Dialog>
+  )
+}
+
+export default InitialModal
