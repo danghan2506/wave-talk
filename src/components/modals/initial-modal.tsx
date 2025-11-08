@@ -7,6 +7,8 @@ import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import FileUpload from "../file-upload"
+import axios from "axios"
+import { useRouter } from "next/navigation"
 const InitialModal = () => {
     const serverForm = useForm({
         resolver: zodResolver(serverFormSchema),
@@ -16,8 +18,16 @@ const InitialModal = () => {
         }
     })
     const isLoading = serverForm.formState.isSubmitting
+    const router = useRouter()
     const onSubmit = async (values: ServerFormData ) => {
-        console.log(values)
+        try {
+            await axios.post("/api/servers", values)
+            serverForm.reset()
+            router.refresh()
+            window.location.reload()
+        } catch (error) {
+            console.error(error)
+        }
     }
   return (
     <Dialog open>

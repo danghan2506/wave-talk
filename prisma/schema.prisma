@@ -29,7 +29,7 @@ model Profile  {
 model Server {
   id String @id @default(uuid())
   name String
-  image String @db.Text
+  imageUrl String @db.Text
   inviteCode String @db.Text
   members Member[] // 1 Server can contain many Profile
   channels Channel[] // 1 Server can contain many Channels

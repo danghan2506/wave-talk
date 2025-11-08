@@ -2,7 +2,6 @@
 import { UploadDropzone } from "@/lib/uploadthing";
 import { X } from "lucide-react";
 import Image from "next/image";
-import { Button } from "./ui/button";
 type FileUploadProps = {
   onChange: (url?: string) => void;
   value: string;
