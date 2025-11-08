@@ -6,6 +6,7 @@ import { ServerFormData, serverFormSchema } from "@/validation/form-schema"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
+import FileUpload from "../file-upload"
 const InitialModal = () => {
     const serverForm = useForm({
         resolver: zodResolver(serverFormSchema),
@@ -32,7 +33,15 @@ const InitialModal = () => {
             <Form {...serverForm}>
                 <form onSubmit={serverForm.handleSubmit(onSubmit)} className="space-y-8">
                     <div className="space-y-8 px-6">
-                        <div className="felx items-center justify-center"></div>
+                        <div className="flex items-center justify-center">
+                            <FormField control={serverForm.control} name="imageUrl" render={({field}) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <FileUpload endpoint="serverImage" value={field.value} onChange={field.onChange}/>
+                                    </FormControl>
+                                </FormItem>
+                            )}/>
+                        </div>
                         <FormField control={serverForm.control} name="name" render={({field}) => (
                         <FormItem>
                             <FormLabel className="uppercase text-xs font-bold text-neutral-500 dark:text-secondary/70">

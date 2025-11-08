@@ -9,6 +9,9 @@ import {
   UserButton,
 } from '@clerk/nextjs'
 import { Geist, Geist_Mono } from "next/font/google";
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
+import { ourFileRouter } from "@/app/api/uploadthing/core";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
@@ -51,6 +54,9 @@ export default function RootLayout({
               <UserButton />
             </SignedIn>
           </header>
+          <NextSSRPlugin
+          routerConfig={extractRouterConfig(ourFileRouter)}
+        />
            <ThemeProvider
             attribute="class"
             defaultTheme="system"
