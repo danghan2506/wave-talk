@@ -12,7 +12,7 @@ const SidebarItem = ({id, imageUrl, name} : SidebarItemProps) => {
   const params = useParams()
   const router = useRouter()
   const onClick = () => {
-    router.push(`/server/${id}`)
+    router.push(`/servers/${id}`)
   }
     return (
     <div>

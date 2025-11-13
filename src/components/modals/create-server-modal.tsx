@@ -9,8 +9,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import FileUpload from "../file-upload"
 import axios from "axios"
 import { useRouter } from "next/navigation"
-import { useSyncExternalStore } from "react"
-const InitialModal = () => {
+import { useModal } from "@/hooks/use-modal-store"
+const CreateServerModal = () => {
     const serverForm = useForm({
         resolver: zodResolver(serverFormSchema),
         defaultValues: {
@@ -18,26 +18,25 @@ const InitialModal = () => {
             imageUrl: "",
         }
     })
+    const {isOpen, onClose, type} = useModal()
+    const isModalOpen = isOpen && type === "createServer"
     const isLoading = serverForm.formState.isSubmitting
     const router = useRouter()
-         const isMounted = useSyncExternalStore(
-            () => () => {}, // subscribe (không cần subscribe gì)
-            () => true,      // getSnapshot (client-side)
-            () => false      // getServerSnapshot (server-side)
-        )
-    if(!isMounted) {return null}
     const onSubmit = async (values: ServerFormData ) => {
         try {
             await axios.post("/api/servers", values)
             serverForm.reset()
             router.refresh()
-            window.location.reload()
         } catch (error) {
             console.error(error)
         }
     }
+    const handleClose = () => {
+        serverForm.reset()
+        onClose()
+    }
   return (
-    <Dialog open>
+    <Dialog open={isModalOpen} onOpenChange={handleClose}>
         <DialogContent className="bg-white text-black p-0 overvlow-hidden">
             <DialogHeader className="pt-8 px-6">
                 <DialogTitle className="text-2xl text-center font-bold">
@@ -82,4 +81,4 @@ const InitialModal = () => {
   )
 }
 
-export default InitialModal
+export default CreateServerModal

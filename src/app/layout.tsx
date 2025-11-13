@@ -14,6 +14,7 @@ import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { ModalProvider } from "@/components/provider/modal-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -63,6 +64,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <ModalProvider/>
             {children}
           </ThemeProvider>
         </body>
