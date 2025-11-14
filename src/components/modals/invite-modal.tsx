@@ -42,9 +42,6 @@ const InviteModal = () => {
           <DialogTitle className="text-2xl text-center font-bold">
             Invite your friends
           </DialogTitle>
-          {/* <DialogDescription className="text-neutral-500 text-center">
-                    Give your server a personality with a name and an image.You can always change it later.
-                </DialogDescription> */}
         </DialogHeader>
         <div className="p-6">
           <Label className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
@@ -66,7 +63,7 @@ const InviteModal = () => {
             variant="link"
             size="sm"
             className="text-xs text-neutral-600 mt-4"
-            onClick={() => onNewInviteLink}
+            onClick={onNewInviteLink}
           >
             Generate a new link
             <RefreshCcw className="w-4 h-4 ml-2" />
