@@ -1,14 +1,14 @@
 import { fetchCurrentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
-import SidebarAction from "./navigation-action";
 import { Separator } from "./ui/separator";
 import { ScrollArea } from "./ui/scroll-area";
 import SidebarItem from "./navigation-item";
 import { ModeToggle } from "./mode-toggle";
 import { UserButton } from "@clerk/nextjs";
+import NavigationAction from "./navigation-action";
 
-const ServerSidebar = async () => {
+const NavigationSidebar = async () => {
   const profile = await fetchCurrentProfile();
   if (!profile) redirect("/");
   const servers = await db.server.findMany({
@@ -22,7 +22,7 @@ const ServerSidebar = async () => {
   });
   return (
     <div className="space-y-4 flex flex-col items-center h-full text-primary w-full dark:bg-[#1E1F22] py-3">
-        <SidebarAction/>
+        <NavigationAction/>
         <Separator className="h-[2px] bg-zinc-300 dark:bg-zinc-700 rounded-md w-100 mx-auto"/>
         <ScrollArea className="flex-1 w-full">
           {servers.map((server) => (
@@ -43,4 +43,4 @@ const ServerSidebar = async () => {
   );
 };
 
-export default ServerSidebar;
+export default NavigationSidebar;

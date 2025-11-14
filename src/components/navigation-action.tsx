@@ -2,7 +2,7 @@
 import { Plus } from "lucide-react";
 import ActionTooltip from "./action-tooltip";
 import { useModal } from "@/hooks/use-modal-store";
-const SidebarAction = () => {
+const NavigationAction = () => {
   const {onOpen} = useModal()
   return (
     <div>
@@ -20,4 +20,4 @@ const SidebarAction = () => {
   );
 };
 
-export default SidebarAction;
+export default NavigationAction;
