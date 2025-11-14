@@ -1,38 +1,80 @@
-"use client"
-import { Dialog, DialogHeader,DialogContent, DialogTitle } from "../ui/dialog"
-import { useModal } from "@/hooks/use-modal-store"
-import { Label } from "../ui/label"
-import { Input } from "../ui/input"
-import { Button } from "../ui/button"
-import { Copy, RefreshCcw } from "lucide-react"
+"use client";
+import { Dialog, DialogHeader, DialogContent, DialogTitle } from "../ui/dialog";
+import { useModal } from "@/hooks/use-modal-store";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Check, Copy, RefreshCcw } from "lucide-react";
+import { useOrigin } from "@/hooks/use-origin";
+import { useState } from "react";
+import axios from "axios";
 const InviteModal = () => {
-    const {isOpen, onClose, type} = useModal()
-    const isModalOpen = isOpen && type === "invite"
+  const {onOpen, isOpen, onClose, type, data } = useModal();
+  const isModalOpen = isOpen && type === "invite";
+  const { server } = data;
+  const origin = useOrigin();
+  const [copied, setCopied] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const inviteUrl = `${origin}/invite/${server?.inviteCode}`;
+  const onCopy = () => {
+    navigator.clipboard.writeText(inviteUrl);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 1000);
+  };
+  const onNewInviteLink = async () => {
+    try {
+        setIsLoading(true)
+        const newInviteLink = await axios.patch(`/api/servers/${server?.id}/invite-code`)
+        onOpen("invite", {server: newInviteLink.data})
+    } catch (error) {
+        console.error(error)
+    }
+    finally{
+        setIsLoading(false)
+    }
+  }
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
-        <DialogContent className="bg-white text-black p-0 overvlow-hidden">
-            <DialogHeader className="pt-8 px-6">
-                <DialogTitle className="text-2xl text-center font-bold">
-                    Invite your friends
-                </DialogTitle>
-                {/* <DialogDescription className="text-neutral-500 text-center">
+      <DialogContent className="bg-white text-black p-0 overvlow-hidden">
+        <DialogHeader className="pt-8 px-6">
+          <DialogTitle className="text-2xl text-center font-bold">
+            Invite your friends
+          </DialogTitle>
+          {/* <DialogDescription className="text-neutral-500 text-center">
                     Give your server a personality with a name and an image.You can always change it later.
                 </DialogDescription> */}
-            </DialogHeader>
-            <div className="p-6">
-                <Label className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">Server invite link</Label>
-                <div className="flex items-center mt-2 gap-x-2">
-                    <Input className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" value="invite-link"></Input>
-                    <Button size="icon">
-                        <Copy className="w-4 h-4"/>
-                    </Button>
-                </div>
-                <Button variant="link" size="sm" className="text-xs text-neutral-600 mt-4">Generate a new link</Button>
-                <RefreshCcw className="w-4 h-4 ml-2"/>
-            </div>
-        </DialogContent>
+        </DialogHeader>
+        <div className="p-6">
+          <Label className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
+            Server invite link
+          </Label>
+          <div className="flex items-center mt-2 gap-x-2">
+            <Input
+              disabled={isLoading}
+              className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
+              value={inviteUrl}
+              readOnly
+            ></Input>
+            <Button disabled={isLoading} size="icon" onClick={() => onCopy}>
+              {copied ? <Check /> : <Copy className="w-4 h-4" />}
+            </Button>
+          </div>
+          <Button
+            disabled={isLoading}
+            variant="link"
+            size="sm"
+            className="text-xs text-neutral-600 mt-4"
+            onClick={() => onNewInviteLink}
+          >
+            Generate a new link
+            <RefreshCcw className="w-4 h-4 ml-2" />
+          </Button>
+        </div>
+      </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default InviteModal
+export default InviteModal;
