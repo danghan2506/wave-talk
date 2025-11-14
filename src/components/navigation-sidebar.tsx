@@ -1,10 +1,10 @@
 import { fetchCurrentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
-import SidebarAction from "./sidebar-action";
+import SidebarAction from "./navigation-action";
 import { Separator } from "./ui/separator";
 import { ScrollArea } from "./ui/scroll-area";
-import SidebarItem from "./sidebar-item";
+import SidebarItem from "./navigation-item";
 import { ModeToggle } from "./mode-toggle";
 import { UserButton } from "@clerk/nextjs";
 
