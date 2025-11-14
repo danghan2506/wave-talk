@@ -20,11 +20,11 @@ const InitialModal = () => {
     })
     const isLoading = serverForm.formState.isSubmitting
     const router = useRouter()
-         const isMounted = useSyncExternalStore(
+    const isMounted = useSyncExternalStore(
             () => () => {}, // subscribe (không cần subscribe gì)
             () => true,      // getSnapshot (client-side)
             () => false      // getServerSnapshot (server-side)
-        )
+    )
     if(!isMounted) {return null}
     const onSubmit = async (values: ServerFormData ) => {
         try {

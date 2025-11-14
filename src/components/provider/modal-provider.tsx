@@ -1,6 +1,7 @@
 "use client"
 import { useSyncExternalStore } from "react"
 import CreateServerModal from "../modals/create-server-modal"
+import InviteModal from "../modals/invite-modal"
 export const ModalProvider = () => {
     const isMounted = useSyncExternalStore(
         () => () => {}, // subscribe (không cần subscribe gì)
@@ -11,6 +12,7 @@ export const ModalProvider = () => {
     return (
         <>
             <CreateServerModal/>
+            <InviteModal/>
         </>
     )
 }
