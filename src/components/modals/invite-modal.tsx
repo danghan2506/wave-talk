@@ -54,7 +54,7 @@ const InviteModal = () => {
               value={inviteUrl}
               readOnly
             ></Input>
-            <Button disabled={isLoading} size="icon" onClick={() => onCopy}>
+            <Button disabled={isLoading} size="icon" onClick={onCopy}>
               {copied ? <Check /> : <Copy className="w-4 h-4" />}
             </Button>
           </div>
