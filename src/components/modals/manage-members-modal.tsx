@@ -26,6 +26,7 @@ const ManageMembersModal = () => {
   const [loadingId, setLoadingId] = useState("");
   const onKickMember = async(memberId: string) => {
     try {
+      setLoadingId(memberId)
       const url = qs.stringifyUrl({
         url: `/api/members/${memberId}`, 
         query: {
