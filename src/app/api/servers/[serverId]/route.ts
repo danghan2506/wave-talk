@@ -24,3 +24,21 @@ export async function PATCH(req: Request, {params}: {params: Promise<{serverId: 
         return new NextResponse("Internal server error", {status: 404})
     }
 }
+export async function DELETE(req: Request, {params}: {params: Promise<{serverId: string}>}){
+    try {
+        const {serverId} = await params
+        const profile = await fetchCurrentProfile()
+        if(!profile) return new NextResponse("Unauthorized", {status: 401})
+        const server = await db.server.delete({
+            where: {
+                id: serverId,
+                profileId: profile.id
+            },
+            
+    })
+    return NextResponse.json(server)    
+    } catch (error) {
+         console.error("An error occured", error)
+        return new NextResponse("Internal server error", {status: 404})
+    }
+}
