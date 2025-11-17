@@ -73,6 +73,7 @@ const CreateChannelModal = () => {
       await axios.post(url, values);
       channelForm.reset();
       router.refresh();
+      onClose()
     } catch (error) {
       console.error(error);
     }

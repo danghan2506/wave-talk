@@ -4,7 +4,7 @@ import { useModal } from "@/hooks/use-modal-store";
 import { useState } from "react";
 import { ServerWithMembersWithProfile } from "@/types/types";
 import { ScrollArea } from "../ui/scroll-area";
-import { UserAvatar } from "@clerk/nextjs";
+import UserAvatar from "../user-avatar";
 import { Check, Gavel, MoreVertical, Shield, ShieldQuestion, ShieldUser, User, UserStar } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Spinner } from "../ui/spinner";
@@ -13,6 +13,7 @@ import { MemberRole } from "@/generated/prisma/enums";
 import qs from "query-string"
 import axios from "axios";
 import { useRouter } from "next/navigation";
+
 const ManageMembersModal = () => {
   const roleIconMap = {
     "GUEST" : <User className="h-4 w-4 ml-2 text-zinc-500"/>,
@@ -75,7 +76,7 @@ const ManageMembersModal = () => {
         <ScrollArea className="mt-8 max-h-[420px] pr-6">
             {server?.members?.map((member) => 
             <div key={member.id} className="flex items-center gap-x-2 mb-6">
-                <UserAvatar/>
+                <UserAvatar src={member.profile.imageUrl}/>
                 <div className="flex flex-col gap-y-1">
                     <div className="text-xs font-semibold flex items-center gap-x-2">
                         {member.profile.name}
