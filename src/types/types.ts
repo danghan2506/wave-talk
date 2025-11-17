@@ -1,4 +1,4 @@
-import { Member, Profile, Server } from "@/generated/prisma/client";
+import { Channel, ChannelType, Member, MemberRole, Profile, Server } from "@/generated/prisma/client";
 import React from "react";
 
 export type ServerWithMembersWithProfile = Server & {
@@ -14,4 +14,16 @@ export interface ServerSearchProps {
             id: string
         }[] | undefined
     }[]
+}
+export interface ServerSectionProps {
+    label?: string
+    role?: string
+    sectionType?: "channels" | "members"
+    channelType?: ChannelType
+    server?: ServerWithMembersWithProfile
+}
+export interface ServerChannelsProps {
+    channel: Channel
+    server: Server
+    role?: MemberRole
 }

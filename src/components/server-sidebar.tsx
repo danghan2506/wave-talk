@@ -13,6 +13,10 @@ import {
   UserStar,
   Video,
 } from "lucide-react";
+import { Separator } from "./ui/separator";
+import ServerSection from "./server-section";
+import ServerChannel from "./server-channel";
+import ServerMember from "./server-member";
 interface ServerSidebarProps {
   serverId: string;
 }
@@ -119,6 +123,41 @@ const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
             ]}
           />
         </div>
+        <Separator className="bg-stone-300 dark:bg-stone-700 rounded-md my-2"/>
+        
+         {textChannels?.length > 0 && (
+         <div className="mb-2">
+            <ServerSection sectionType="channels" channelType={ChannelType.TEXT} role={role} label="Text Channels"/>
+            {textChannels.map((channel) => (
+              <ServerChannel key={channel.id} channel={channel} role={role} server={server}/>
+            ))}
+          </div>
+        )}
+         {audioChannels?.length > 0 && (
+         <div className="mb-2">
+            <ServerSection sectionType="channels" channelType={ChannelType.AUDIO} role={role} label="Voice Channels"/>
+            {audioChannels.map((channel) => (
+              <ServerChannel key={channel.id} channel={channel} role={role} server={server}/>
+            ))}
+          </div>
+        )}
+         {videoChannels?.length > 0 && (
+         <div className="mb-2">
+            <ServerSection sectionType="channels" channelType={ChannelType.VIDEO} role={role} label="Video Channels"/>
+            {videoChannels.map((channel) => (
+              <ServerChannel key={channel.id} channel={channel} role={role} server={server}/>
+            ))}
+          </div>
+        )}
+        {members?.length > 0 && (
+         <div className="mb-2">
+            <ServerSection sectionType="members" role={role} label="Members"/>
+            {members.map((member) => (
+              <ServerMember key={member.id}/>
+            ))}
+          </div>
+        )}
+        
       </ScrollArea>
     </div>
   );
