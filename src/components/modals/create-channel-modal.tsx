@@ -32,15 +32,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useEffect } from "react";
 const CreateChannelModal = () => {
+  const { isOpen, onClose, type, data } = useModal();
+  const {channelType} = data
   const channelForm = useForm({
     resolver: zodResolver(channelFormSchema),
     defaultValues: {
       name: "",
-      type: ChannelType.TEXT,
+      type: channelType || ChannelType.TEXT,
     },
   });
-  const { isOpen, onClose, type } = useModal();
   const isModalOpen = isOpen && type === "createChannel";
   const isLoading = channelForm.formState.isSubmitting;
   const router = useRouter();
@@ -62,6 +64,14 @@ const CreateChannelModal = () => {
       label: "Video Channel",
     },
   ];
+   useEffect(() => {
+    if(channelType) {
+      channelForm.setValue("type", channelType)
+    }
+    else{
+      channelForm.setValue("type", ChannelType.TEXT)
+    }
+  }, [channelType, channelForm])
   const onSubmit = async (values: ChannelFormData) => {
     try {
       const url = qs.stringifyUrl({

@@ -27,3 +27,7 @@ export interface ServerChannelsProps {
     server: Server
     role?: MemberRole
 }
+export interface ServerMemberProps {
+    member: Member & {profile: Profile},
+    server: Server
+}
