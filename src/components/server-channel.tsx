@@ -39,7 +39,7 @@ const ServerChannel = ({ channel, server, role }: ServerChannelsProps) => {
       {channel.name !== "general" && role !== MemberRole.GUEST && (
         <div className="ml-auto flex items-center gap-x-2">
             <ActionTooltip label="Edit">
-                <Edit className="hidden group-hover:block w-4 h-4 text-stone-500 hover:text-stone-600 dark:text-zinc-400 dark:hover:text-stone-300 transition"></Edit>
+                <Edit onClick={() => onOpen("editChannel", {server, channel})} className="hidden group-hover:block w-4 h-4 text-stone-500 hover:text-stone-600 dark:text-zinc-400 dark:hover:text-stone-300 transition"></Edit>
             </ActionTooltip>
             <ActionTooltip label="Delete">
                 <Trash onClick={() => onOpen("deleteChannel", {server, channel})} className="hidden group-hover:block w-4 h-4 text-stone-500 hover:text-stone-600 dark:text-zinc-400 dark:hover:text-stone-300 transition"></Trash>
