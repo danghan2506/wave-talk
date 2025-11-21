@@ -18,12 +18,15 @@ const ServerMember = ({member, server} : ServerMemberProps) => {
     ),
   }
   const params = useParams()
-    const router = useRouter()
-    const icon = roleIconMap[member.role]
+  const router = useRouter()
+  const icon = roleIconMap[member.role]
+  const onClick = () => {
+    router.push(`/servers/${server.id}/conversations/${member.id}`)
+  }
   return (
-    <button className={cn("group px-2 py-2 rounded-md flex items-center gap-x-2 w-full hover:bg-stone-700/10 dark:hover:bg-stone-700/50 transition mb-1", params?.memberId === member.id && "bg-stone-700/20 dark:bg-stone-700")}>
+    <button onClick={onClick} className={cn("group px-2 py-2 rounded-md flex items-center gap-x-2 w-full hover:bg-stone-700/10 dark:hover:bg-stone-700/50 transition mb-1", params?.memberId === member.id && "bg-stone-700/20 dark:bg-stone-700")}>
       <UserAvatar src={member.profile.imageUrl} className="h-8 w-8 md:h-8 md:w-8"/>
-      <p className={cn("font-semibold text-sm text-stone-500 group-hover:text-stone-600 dark:text-stone-400 dark:group-hover:text-stone-300 transition", params?.channelId === member.id && "text-primary dark:text-stone-200 dark:group-hover:text-white" )}>
+      <p className={cn("font-semibold text-sm text-stone-500 group-hover:text-stone-600 dark:text-stone-400 dark:group-hover:text-stone-300 transition", params?.memberID === member.id && "text-primary dark:text-stone-200 dark:group-hover:text-white" )}>
         {member.profile.name}
       </p>
       {icon}
