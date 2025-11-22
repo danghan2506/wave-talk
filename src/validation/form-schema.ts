@@ -10,5 +10,9 @@ export const channelFormSchema = z.object({
     }),
     type: z.enum(ChannelType).optional(),
 })
+export const contentFormSchema = z.object({
+    content : z.string().min(1)
+})
 export type ServerFormData = z.infer<typeof serverFormSchema>
 export type ChannelFormData = z.infer<typeof channelFormSchema>
+export type ContentFormData = z.infer<typeof contentFormSchema>
