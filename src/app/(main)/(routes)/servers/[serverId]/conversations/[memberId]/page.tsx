@@ -29,9 +29,11 @@ const MemberIdPage = async ({ params }: MemberIdPageProps) => {
     currentMember.id,
     memberId
   );
-  if (!conversation) return redirect(`/servers/${serverId}`);
-  const { sender, receiver } = conversation;
-  const otherMember = sender.profileId === profile.id ? receiver : sender;
+  if (!conversation) {
+    return redirect(`/servers/${serverId}`);
+  }
+  const { memberOne, memberTwo } = conversation;
+  const otherMember = memberOne.profileId === profile.id ? memberTwo : memberOne;
   return (
     <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
       <ChatHeader imageUrl={otherMember.profile.imageUrl} name={otherMember.profile.name} serverId={serverId} type="conversation"/>

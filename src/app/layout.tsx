@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/provider/theme-provider";
-import {ClerkProvider,} from '@clerk/nextjs'
+import {ClerkProvider, SignedOut, SignedIn, UserButton, SignInButton, SignUpButton} from '@clerk/nextjs'
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
