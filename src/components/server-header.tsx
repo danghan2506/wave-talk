@@ -10,6 +10,7 @@ import {
 } from "./ui/dropdown-menu";
 import { ChevronDown, LogOut, Settings, Trash, UserPlus, Users } from "lucide-react";
 import { useModal } from "@/hooks/use-modal-store";
+import { useSyncExternalStore } from "react";
 interface ServerHeaderProps {
   server: ServerWithMembersWithProfile;
   role?: MemberRole;
@@ -19,6 +20,12 @@ const ServerHeader = ({ server, role }: ServerHeaderProps) => {
   const isAdmin = role === MemberRole.ADMIN;
   const isModerator = isAdmin || role === MemberRole.MODERATOR;
   const {onOpen} = useModal()
+      const isMounted = useSyncExternalStore(
+          () => () => {},
+          () => true,      
+          () => false      
+      )
+      if(!isMounted) {return null}
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="focus:outline-none" asChild>

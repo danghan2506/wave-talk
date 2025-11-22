@@ -1,13 +1,6 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/provider/theme-provider";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from '@clerk/nextjs'
+import {ClerkProvider,} from '@clerk/nextjs'
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
@@ -42,8 +35,8 @@ export default function RootLayout({
         <body className={cn(`${geistSans.variable} ${geistMono.variable} antialiased`, 
           "bg-white dark:bg-[#262626]"
         )}>
-          <header className="flex justify-end items-center p-4 gap-4 h-16">
-            <SignedOut>
+          <header className="h-full">
+            {/* <SignedOut>
               <SignInButton />
               <SignUpButton>
                 <button className="bg-[#6c47ff] text-white rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer">
@@ -53,7 +46,7 @@ export default function RootLayout({
             </SignedOut>
             <SignedIn>
               <UserButton />
-            </SignedIn>
+            </SignedIn> */}
           </header>
           <NextSSRPlugin
           routerConfig={extractRouterConfig(ourFileRouter)}
