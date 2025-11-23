@@ -3,11 +3,14 @@ import { ContentFormData, contentFormSchema } from "@/validation/form-schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
+import axios from "axios"
+import qs from "query-string"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form"
 import { Plus, Smile } from "lucide-react"
 import { Input } from "../ui/input"
 interface ChatInputProps {
     apiUrl: string
+    
     query: Record<string, any>
     name: string
     type: "conversation" | "channel"
@@ -20,8 +23,17 @@ const ChatInput = ({apiUrl, query, name, type} : ChatInputProps) => {
     }
   })
   const isLoading = contentForm.formState.isSubmitting
-  const onSubmit = async(value : z.infer<typeof contentFormSchema>) => {
-    console.log(value)
+  const onSubmit = async(values : z.infer<typeof contentFormSchema>) => {
+    try{
+      const url = qs.stringifyUrl({
+        url: apiUrl,
+        query
+      })
+      await axios.post(url, values)
+    }
+    catch(error){
+      console.log(error)
+    }
   }
     return (
        <Form {...contentForm}>
@@ -46,7 +58,7 @@ const ChatInput = ({apiUrl, query, name, type} : ChatInputProps) => {
                     disabled={isLoading} // Vô hiệu hóa khi đang gửi
                     className="px-14 py-6 bg-stone-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-stone-600 dark:text-zinc-200"
                     placeholder={`Message ${
-                      type === "conversation" ? name : `# + ${name}`
+                      type === "conversation" ? name : "#" +`${name}`
                     }`}
                     {...field} // Đặt tất cả props từ useForm
                   />

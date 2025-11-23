@@ -1,4 +1,4 @@
-import { currentUser } from "@clerk/nextjs/server";
+import { currentUser} from "@clerk/nextjs/server";
 import { db } from "./db";
 export const fetchCurrentProfile = async() => {
     const user = await currentUser()
