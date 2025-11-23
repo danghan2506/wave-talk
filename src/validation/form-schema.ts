@@ -13,6 +13,10 @@ export const channelFormSchema = z.object({
 export const contentFormSchema = z.object({
     content : z.string().min(1)
 })
+export const messageFileFormSchema = z.object({
+    fileUrl: z.string().min(1, "File url is required")
+})
+export type MessageFileFormData = z.infer<typeof messageFileFormSchema>
 export type ServerFormData = z.infer<typeof serverFormSchema>
 export type ChannelFormData = z.infer<typeof channelFormSchema>
 export type ContentFormData = z.infer<typeof contentFormSchema>
