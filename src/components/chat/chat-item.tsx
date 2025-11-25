@@ -14,6 +14,7 @@ import { Button } from "../ui/button";
 import qs from "query-string"
 import * as z from "zod"
 import axios from "axios";
+import { useModal } from "@/hooks/use-modal-store";
 interface ChatItemProps {
   id: string;
   content: string;
@@ -46,7 +47,7 @@ const ChatItem = ({
   socketQuery,
 }: ChatItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const {onOpen} = useModal()
   const contentForm = useForm<ContentFormData>({
     resolver: zodResolver(contentFormSchema),
     defaultValues: {
@@ -179,8 +180,8 @@ const ChatItem = ({
                     <Edit onClick={() => setIsEditing(true)} className="cursor-pointer ml-auto w-4 h-4 text-stone-500 hover:text-zinc-600 dark:hover:text-stone-300 transition"/>
                 </ActionTooltip>
             )}
-             <ActionTooltip label="Edit">
-            <Trash className="cursor-pointer ml-auto w-4 h-4 text-stone-500 hover:text-zinc-600 dark:hover:text-stone-300 transition"/>
+             <ActionTooltip label="Delete">
+            <Trash onClick={() => onOpen("deleteMessage", {apiUrl: `${socketUrl}/${id}`, query: socketQuery})} className="cursor-pointer ml-auto w-4 h-4 text-stone-500 hover:text-zinc-600 dark:hover:text-stone-300 transition"/>
         </ActionTooltip>
         </div>
       )}
