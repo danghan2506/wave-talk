@@ -6,6 +6,7 @@ import { Loader2, ServerCrash } from "lucide-react"
 import { Fragment } from "react"
 import ChatItem from "./chat-item"
 import {format} from "date-fns"
+import { useChatSocket } from "@/hooks/use-chat-socket"
 interface ChatMessagesProps {
     name: string
     member: Member
@@ -23,14 +24,18 @@ type MessageWithMemberWithProfile = Message & {
     profile: Profile
   }
 }
+
 const ChatMessages = ({name, member, chatId, apiUrl, socketUrl, socketQuery, paramKey, paramValue, type } : ChatMessagesProps) => {
   const queryKey = `chat:${chatId}`
+  const addKey = `chat:${chatId}:message`
+  const updateKey = `chat:${chatId}:message:update`
   const {data, fetchNextPage, hasNextPage, isFetchingNextPage, status} = useChatQuery({
     queryKey,
     apiUrl,
     paramKey,
     paramValue
   })
+  useChatSocket({queryKey, addKey, updateKey})
   if(status === "loading"){
     return (
       <div className="flex flex-col flex-1 justify-center items-center">
@@ -47,7 +52,6 @@ const ChatMessages = ({name, member, chatId, apiUrl, socketUrl, socketQuery, par
       </div>
     )
   }
-  console.log(data)
   return (
     <div className="flex-1 flex flex-col py-4 overflow-y-auto">
         <div className="flex-1"/>
