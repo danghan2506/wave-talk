@@ -1,6 +1,7 @@
 import ChatHeader from "@/components/chat/chat-header";
 import ChatInput from "@/components/chat/chat-input";
 import ChatMessages from "@/components/chat/chat-messages";
+import MediaRoom from "@/components/media-room";
 import { fetchCurrentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
@@ -34,7 +35,9 @@ const ChannelIdPage = async ({ params }: channelIdProps) => {
         serverId={channel.serverId}
         type="channel"
       />
-      <ChatMessages
+      {channel.type === "TEXT" && (
+        <>
+         <ChatMessages
         member={member}
         name={channel.name}
         type="channel"
@@ -45,12 +48,22 @@ const ChannelIdPage = async ({ params }: channelIdProps) => {
         paramKey="channelId"
         paramValue={channel.id}
       />
-      <ChatInput
+         <ChatInput
         name={channel.name}
         type="channel"
         apiUrl="/api/socket/messages"
         query={{ channelId: channel.id, serverId: channel.serverId }}
       />
+        </>
+      )}
+      {channel.type === "AUDIO" && (
+        <MediaRoom chatId={channel.id} video={false} audio={true}></MediaRoom>
+      )}
+      {channel.type === "VIDEO" && (
+        <MediaRoom chatId={channel.id} video={true} audio={true}></MediaRoom>
+      )}
+     
+   
     </div>
   );
 };
