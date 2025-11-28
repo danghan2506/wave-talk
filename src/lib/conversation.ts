@@ -4,7 +4,15 @@ import { Prisma } from "@/generated/prisma/client";
 export const getOrCreateConversation = async (
   memberOneId: string,
   memberTwoId: string
-) => {
+): Promise<
+  | (Prisma.ConversationGetPayload<{
+      include: {
+        memberOne: { include: { profile: true } };
+        memberTwo: { include: { profile: true } };
+      };
+    }>)
+  | null
+> => {
   let conversation =
     (await findConversation(memberOneId, memberTwoId)) ||
     (await findConversation(memberTwoId, memberOneId));
@@ -19,8 +27,16 @@ export const getOrCreateConversation = async (
 const findConversation = async (
   memberOneId: string,
   memberTwoId: string
-) => {
-  return await db.conversation.findFirst({
+): Promise<
+  | (Prisma.ConversationGetPayload<{
+      include: {
+        memberOne: { include: { profile: true } };
+        memberTwo: { include: { profile: true } };
+      };
+    }>)
+  | null
+> => {
+  return (await db.conversation.findFirst({
     where: {
       AND: [{ memberOneId }, { memberTwoId }],
     },
@@ -36,15 +52,28 @@ const findConversation = async (
         },
       },
     },
-  });
+  })) as Prisma.ConversationGetPayload<{
+    include: {
+      memberOne: { include: { profile: true } };
+      memberTwo: { include: { profile: true } };
+    };
+  }> | null;
 };
 
 const createNewConversation = async (
   memberOneId: string,
   memberTwoId: string
-) => {
+): Promise<
+  | (Prisma.ConversationGetPayload<{
+      include: {
+        memberOne: { include: { profile: true } };
+        memberTwo: { include: { profile: true } };
+      };
+    }>)
+  | null
+> => {
   try {
-    return await db.conversation.create({
+    return (await db.conversation.create({
       data: {
         memberOneId,
         memberTwoId,
@@ -61,7 +90,12 @@ const createNewConversation = async (
           },
         },
       },
-    });
+    })) as Prisma.ConversationGetPayload<{
+      include: {
+        memberOne: { include: { profile: true } };
+        memberTwo: { include: { profile: true } };
+      };
+    }>;
   } catch (error) {
     return null;
   }
