@@ -1,19 +1,18 @@
 import { db } from "@/lib/db";
 import { Prisma } from "@/generated/prisma/client";
 
+type ConversationWithMembers = Prisma.ConversationGetPayload<{
+  include: {
+    memberOne: { include: { profile: true } };
+    memberTwo: { include: { profile: true } };
+  };
+}>;
+
 export const getOrCreateConversation = async (
   memberOneId: string,
   memberTwoId: string
-): Promise<
-  | (Prisma.ConversationGetPayload<{
-      include: {
-        memberOne: { include: { profile: true } };
-        memberTwo: { include: { profile: true } };
-      };
-    }>)
-  | null
-> => {
-  let conversation =
+): Promise<ConversationWithMembers | null> => {
+  let conversation: ConversationWithMembers | null =
     (await findConversation(memberOneId, memberTwoId)) ||
     (await findConversation(memberTwoId, memberOneId));
   
@@ -27,15 +26,7 @@ export const getOrCreateConversation = async (
 const findConversation = async (
   memberOneId: string,
   memberTwoId: string
-): Promise<
-  | (Prisma.ConversationGetPayload<{
-      include: {
-        memberOne: { include: { profile: true } };
-        memberTwo: { include: { profile: true } };
-      };
-    }>)
-  | null
-> => {
+): Promise<ConversationWithMembers | null> => {
   return (await db.conversation.findFirst({
     where: {
       AND: [{ memberOneId }, { memberTwoId }],
@@ -52,26 +43,13 @@ const findConversation = async (
         },
       },
     },
-  })) as Prisma.ConversationGetPayload<{
-    include: {
-      memberOne: { include: { profile: true } };
-      memberTwo: { include: { profile: true } };
-    };
-  }> | null;
+  })) as ConversationWithMembers | null;
 };
 
 const createNewConversation = async (
   memberOneId: string,
   memberTwoId: string
-): Promise<
-  | (Prisma.ConversationGetPayload<{
-      include: {
-        memberOne: { include: { profile: true } };
-        memberTwo: { include: { profile: true } };
-      };
-    }>)
-  | null
-> => {
+): Promise<ConversationWithMembers | null> => {
   try {
     return (await db.conversation.create({
       data: {
@@ -90,12 +68,7 @@ const createNewConversation = async (
           },
         },
       },
-    })) as Prisma.ConversationGetPayload<{
-      include: {
-        memberOne: { include: { profile: true } };
-        memberTwo: { include: { profile: true } };
-      };
-    }>;
+    })) as ConversationWithMembers;
   } catch (error) {
     return null;
   }
