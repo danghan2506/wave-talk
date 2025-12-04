@@ -2,6 +2,8 @@ import ChatHeader from "@/components/chat/chat-header";
 import ChatInput from "@/components/chat/chat-input";
 import ChatMessages from "@/components/chat/chat-messages";
 import MediaRoom from "@/components/media-room";
+import AudioRoom from "@/components/audio-room";
+import VideoRoom from "@/components/video-room";
 import { fetchCurrentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
@@ -57,10 +59,11 @@ const ChannelIdPage = async ({ params }: channelIdProps) => {
         </>
       )}
       {channel.type === "AUDIO" && (
-        <MediaRoom chatId={channel.id} video={false} audio={true}></MediaRoom>
+        // <MediaRoom chatId={channel.id} video={false} audio={true}></MediaRoom>
+        <AudioRoom chatId={channel.id} username={profile.name}/>
       )}
       {channel.type === "VIDEO" && (
-        <MediaRoom chatId={channel.id} video={true} audio={true}></MediaRoom>
+        <VideoRoom chatId={channel.id} username={profile.name}/>
       )}
      
    
