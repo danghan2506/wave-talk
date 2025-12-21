@@ -25,6 +25,8 @@ const DeleteServerModal = () => {
         setIsLoading(false)
     }
   }
+  console.log(server)
+  console.log("Server name: ",server?.name)
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white text-black p-0 overvlow-hidden">
@@ -33,7 +35,7 @@ const DeleteServerModal = () => {
             Delete server
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">Are you sure want to do this? <br/>
-            <span className="font-semibold text-rose-500">{server?.name} will be removed permantly</span></DialogDescription>
+            <span className="font-semibold text-rose-500">{server?.name} will be removed permanently</span></DialogDescription>
         </DialogHeader>
         <DialogFooter className="bg-zinc-300 px-6 py-4">
             <div className="flex items-center justify-between w-full">

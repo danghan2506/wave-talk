@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  transpilePackages: ["@prisma/client"],
   turbopack: {
      resolveAlias: {
       "@/*": "./src/*"
@@ -9,21 +10,24 @@ const nextConfig: NextConfig = {
   },
   images: {
     remotePatterns: [
-        {
+      {
         protocol: 'https',
-        // PHẢI CÓ *. để chấp nhận các subdomain ngẫu nhiên (ví dụ: ifmh1596xx)
-        hostname: '*.ufs.sh', 
+        hostname: 'utfs.io', // <--- THÊM DÒNG NÀY (Domain phổ biến nhất của UploadThing)
+        port: '',
+        pathname: '/**', // Cho phép tất cả các đường dẫn
+      },
+      {
+        protocol: 'https',
+        hostname: '*.ufs.sh', // Domain mới (App specific regions)
         port: '',
         pathname: '/**',
       },
       {
         protocol: 'https',
-        // Đây cũng là một miền UploadThing thường dùng, nên thêm vào
-        hostname: 'uploadthing-content.io', 
+        hostname: 'uploadthing-content.io', // Domain cũ
         port: '',
         pathname: '/**',
       },
-      // ... thêm các remotePatterns khác nếu cần
     ]
   }
 };

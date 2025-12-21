@@ -7,6 +7,7 @@ export const revalidate = 0;
 export async function GET(req: NextRequest) {
   const room = req.nextUrl.searchParams.get('room');
   const username = req.nextUrl.searchParams.get('username');
+  const imageUrl = req.nextUrl.searchParams.get('imageUrl');
   if (!room) {
     return NextResponse.json({ error: 'Missing "room" query parameter' }, { status: 400 });
   } else if (!username) {
@@ -16,14 +17,14 @@ export async function GET(req: NextRequest) {
   const apiKey = process.env.LIVEKIT_API_KEY;
   const apiSecret = process.env.LIVEKIT_API_SECRET;
   const wsUrl = process.env.NEXT_PUBLIC_LIVEKIT_URL;
-  console.log(wsUrl)
-  console.log(apiKey)
-  console.log(apiSecret)
   if (!apiKey || !apiSecret || !wsUrl) {
     return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
   }
-
-  const at = new AccessToken(apiKey, apiSecret, { identity: username });
+   const metadata = JSON.stringify({ imageUrl: imageUrl || '' });
+  const at = new AccessToken(apiKey, apiSecret, { 
+    identity: username,
+    metadata 
+  });
   at.addGrant({ room, roomJoin: true, canPublish: true, canSubscribe: true });
 
   return NextResponse.json(
