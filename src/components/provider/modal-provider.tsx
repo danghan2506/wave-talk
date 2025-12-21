@@ -11,6 +11,8 @@ import DeleteChannelModal from "@/components/modals/delete-channel-modal"
 import EditChannelModal from "@/components/modals/edit-channel-modal"
 import MessageFileModal from "@/components/modals/message-file-modal"
 import DeleteMessageModal from "../modals/delete-message-modal"
+import ImageViewerModal from "@/components/modals/image-viewer-modal"
+
 export const ModalProvider = () => {
     const isMounted = useSyncExternalStore(
         () => () => {}, // subscribe (không cần subscribe gì)
@@ -31,6 +33,7 @@ export const ModalProvider = () => {
             <EditChannelModal/>
             <MessageFileModal/>
             <DeleteMessageModal/>
+            <ImageViewerModal/>
         </>
     )
 }

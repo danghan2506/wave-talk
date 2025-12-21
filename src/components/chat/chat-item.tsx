@@ -93,12 +93,49 @@ const ChatItem = ({
         console.log(error)
     }
   }
-  const fileType = fileUrl?.split(".").pop();
-  const isPdf = fileType === "pdf";
-  const isImage =
-    !isPdf &&
-    fileUrl &&
-    ["png", "jpg", "jpeg", "gif", "webp"].includes(fileType!);
+  
+  // Determine file type from content (filename) or URL
+  const getExtensionFromString = (str: string | null) => {
+    if (!str) return null;
+    // Remove query params and get last part after dot
+    const clean = str.split("?")[0];
+    const ext = clean.split(".").pop()?.toLowerCase();
+    // Only return if it looks like a valid extension (not a random hash)
+    if (ext && ext.length <= 5 && /^[a-z0-9]+$/.test(ext)) {
+      return ext;
+    }
+    return null;
+  };
+  
+  // Try to get extension from content first (new messages have filename in content)
+  // Then try from URL (for backward compatibility)
+  const contentExtension = getExtensionFromString(content);
+  const urlExtension = getExtensionFromString(fileUrl);
+  const fileExtension = contentExtension || urlExtension;
+  
+  // Check if URL is from UploadThing
+  const isUploadThingUrl = fileUrl?.includes("ufs.sh") || fileUrl?.includes("uploadthing");
+  
+  // Check for PDF
+  const isPdf = fileUrl && (
+    fileExtension === "pdf" || 
+    content?.toLowerCase().includes(".pdf") ||
+    fileUrl?.toLowerCase().includes(".pdf") ||
+    fileUrl?.includes("/pdf")
+  );
+  
+  // Check for image
+  const imageExtensions = ["png", "jpg", "jpeg", "gif", "webp", "svg", "bmp"];
+  const hasKnownImageExtension = imageExtensions.includes(fileExtension!) ||
+    imageExtensions.some(ext => content?.toLowerCase().includes(`.${ext}`)) ||
+    imageExtensions.some(ext => fileUrl?.toLowerCase().includes(`.${ext}`));
+  
+  // isImage: has image extension, OR is UploadThing URL that's not PDF
+  const isImage = fileUrl && !isPdf && (
+    hasKnownImageExtension ||
+    fileUrl.includes("/image") ||
+    (isUploadThingUrl && !isPdf) // UploadThing URLs default to image if not PDF
+  );
   const isAdmin = currentMember.role === "ADMIN";
   const isModerator = currentMember.role === "MODERATOR";
   const isOwner = currentMember.id === member.id;
@@ -128,30 +165,53 @@ const ChatItem = ({
             </span>
           </div>
           {isImage && (
-            <a
-              href={fileUrl}
-              target="_blank"
-              rel="noopener noreferer"
-              className="relative aspect-square rounded-md mt-2 overflow-hidden border flex items-center bg-secondary h-48 w-48"
+            <div
+              onClick={() => onOpen("imageViewer", { 
+                imageUrl: fileUrl!, 
+                imageName: content 
+              })}
+              className="relative aspect-square rounded-md mt-2 overflow-hidden border flex items-center bg-secondary h-48 w-48 cursor-pointer group"
             >
               <Image
-                src={fileUrl}
+                src={fileUrl!}
                 alt={content}
                 fill
-                className="object-cover"
+                className="object-cover transition-transform duration-200 group-hover:scale-105"
+                unoptimized
               />
-            </a>
+              {/* Subtle hover overlay */}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200" />
+            </div>
           )}
           {isPdf && (
-            <div className="relative flex items-center p-2 mt-2 rounded-md bg-background/10">
-              <FileIcon className="h-10 w-10 fill-indigo-200 stroke-indigo-400" />
+            <div className="relative flex items-center p-4 mt-2 rounded-xl bg-gradient-to-r from-indigo-500/10 to-purple-500/10 dark:from-indigo-500/20 dark:to-purple-500/20 border border-indigo-200/50 dark:border-indigo-700/50 max-w-sm shadow-sm">
+              {/* PDF Icon Container */}
+              <div className="flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg flex-shrink-0">
+                <FileIcon className="h-8 w-8 text-white fill-white/20" />
+              </div>
+              
+              {/* File Info */}
+              <div className="ml-4 flex-1 min-w-0">
+                <p className="text-sm font-semibold text-stone-800 dark:text-stone-100 truncate">
+                  {/* Show filename from content, or default text */}
+                  {content?.toLowerCase().endsWith('.pdf') ? content : 'PDF Document'}
+                </p>
+                <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+                  PDF File • Click to download
+                </p>
+              </div>
+              
+              {/* Download Button */}
               <a
                 href={fileUrl!}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="ml-2 text-sm text-indigo-500 dark:text-indigo-400 hover:underline"
+                className="ml-3 p-2.5 rounded-lg bg-indigo-500 hover:bg-indigo-600 text-white transition-colors shadow-md hover:shadow-lg"
+                title="Download PDF"
               >
-                View PDF Document
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
               </a>
             </div>
           )}

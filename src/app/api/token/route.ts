@@ -20,7 +20,10 @@ export async function GET(req: NextRequest) {
   if (!apiKey || !apiSecret || !wsUrl) {
     return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
   }
-   const metadata = JSON.stringify({ imageUrl: imageUrl || '' });
+
+  // Include imageUrl in participant metadata
+  const metadata = JSON.stringify({ imageUrl: imageUrl || '' });
+
   const at = new AccessToken(apiKey, apiSecret, { 
     identity: username,
     metadata 

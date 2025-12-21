@@ -9,14 +9,16 @@ import FileUpload from "../file-upload"
 import axios from "axios"
 import qs from "query-string"
 import { useModal } from "@/hooks/use-modal-store"
+
 const MessageFileModal = () => {
     const {isOpen, onClose, type, data} = useModal()
     const isModalOpen = isOpen && type === "messageFile"
     const {apiUrl, query} = data
-    const messageFileForm = useForm({
+    const messageFileForm = useForm<MessageFileFormData>({
         resolver: zodResolver(messageFileFormSchema),
         defaultValues: {
             fileUrl: "",
+            fileName: "",
         }
     })
     const handleClose = () => {
@@ -30,7 +32,8 @@ const MessageFileModal = () => {
                 url: apiUrl || "",
                 query: query
             })
-            await axios.post(url, {...values, content: values.fileUrl})
+            // Store fileName in content for file type detection in chat-item
+            await axios.post(url, {...values, content: values.fileName || values.fileUrl})
             messageFileForm.reset()
             handleClose()
         } catch (error) {
@@ -55,7 +58,15 @@ const MessageFileModal = () => {
                             <FormField control={messageFileForm.control} name="fileUrl" render={({field}) => (
                                 <FormItem>
                                     <FormControl>
-                                        <FileUpload endpoint="messageFile" value={field.value} onChange={field.onChange}/>
+                                        <FileUpload 
+                                            endpoint="messageFile" 
+                                            value={field.value} 
+                                            fileName={messageFileForm.watch("fileName")}
+                                            onChange={(url, fileName) => {
+                                                field.onChange(url);
+                                                messageFileForm.setValue("fileName", fileName || "");
+                                            }}
+                                        />
                                     </FormControl>
                                 </FormItem>
                             )}/>
