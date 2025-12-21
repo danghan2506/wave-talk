@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 export const initialProfile = async () => {
     const user = await currentUser()
     if(!user){
-        redirect("/")
+        redirect("/sign-in")
     }
     const profile = await db.profile.findUnique({
         where: {

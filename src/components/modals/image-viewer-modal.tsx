@@ -12,8 +12,19 @@ const ImageViewerModal = () => {
   
   const isModalOpen = isOpen && type === "imageViewer";
   const { imageUrl, imageName } = data;
+
+  // Handle close with animation
+  const handleClose = () => {
+    setIsAnimating(false);
+    // Wait for exit animation before actually closing
+    setTimeout(() => {
+      onClose();
+    }, 200);
+  };
+
   useEffect(() => {
     if (isModalOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsLoading(true);
       requestAnimationFrame(() => {
         setIsAnimating(true);
@@ -41,16 +52,7 @@ const ImageViewerModal = () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "unset";
     };
-  }, [isModalOpen]);
-
-  // Handle close with animation
-  const handleClose = () => {
-    setIsAnimating(false);
-    // Wait for exit animation before actually closing
-    setTimeout(() => {
-      onClose();
-    }, 200);
-  };
+  }, [isModalOpen, handleClose]);
 
   // Handle backdrop click
   const handleBackdropClick = (e: React.MouseEvent) => {
