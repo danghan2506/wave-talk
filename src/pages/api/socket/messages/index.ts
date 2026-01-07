@@ -60,6 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
             }
         })
         const channelKey = `chat:${channelId}:messages`
+        // Phát tin nhắn mới đến tất cả các client đã kết nối qua Socket.io
         res?.socket?.server?.io.emit(channelKey, message)
         return res.status(200).json(message)
     } catch (error) {

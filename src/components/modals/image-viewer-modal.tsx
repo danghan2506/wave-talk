@@ -76,12 +76,33 @@ const ImageViewerModal = () => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = imageName || "image";
+      
+      let name = imageName || "image";
+      // Map common MIME types to extensions
+      const mimeToExt: Record<string, string> = {
+        "image/jpeg": "jpg",
+        "image/png": "png",
+        "image/gif": "gif",
+        "image/webp": "webp",
+        "image/svg+xml": "svg",
+        "image/bmp": "bmp",
+      };
+
+      const type = blob.type;
+      const extension = mimeToExt[type] || type.split("/")[1];
+
+      // Append extension if the name doesn't already end with it
+      if (extension && !name.toLowerCase().endsWith(`.${extension}`)) {
+        name = `${name}.${extension}`;
+      }
+      
+      a.download = name;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
     } catch (error) {
+      console.error("Download failed:", error);
       // Fallback: open in new tab
       window.open(imageUrl, "_blank");
     }

@@ -3,6 +3,7 @@ import { fetchCurrentProfile } from "@/lib/current-profile"
 import { db } from "@/lib/db"
 import { NextResponse } from "next/server"
 const MESSAGE_BATCH = 10
+// Fetch messages
 export async function GET(req: Request){
     try {
         const profile = await fetchCurrentProfile()

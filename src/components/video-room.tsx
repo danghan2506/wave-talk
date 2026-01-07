@@ -41,6 +41,47 @@ interface VideoRoomProps {
 
 type LayoutMode = 'grid' | 'speaker'
 
+const MicToggleButton = () => {
+  const tracks = useTracks([Track.Source.Microphone], { onlySubscribed: false })
+  const isMuted = !tracks.some(t => !t.publication?.isMuted)
+
+  return (
+    <TrackToggle
+      source={Track.Source.Microphone}
+      className={cn(
+        "w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all duration-200",
+        "bg-secondary hover:bg-secondary/80 text-secondary-foreground",
+        "font-semibold relative overflow-hidden group"
+      )}
+      showIcon={false}
+    >
+      <div className="relative z-10 transition-transform duration-200 group-hover:scale-110">
+        {isMuted ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+      </div>
+    </TrackToggle>
+  )
+}
+
+const CameraToggleButton = () => {
+  const tracks = useTracks([Track.Source.Camera], { onlySubscribed: false })
+  const isCameraOff = !tracks.some(t => !t.publication?.isMuted)
+
+  return (
+    <TrackToggle
+      source={Track.Source.Camera}
+      className={cn(
+        "w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all duration-200",
+        "bg-secondary hover:bg-secondary/80 text-secondary-foreground",
+        "font-semibold relative overflow-hidden group"
+      )}
+      showIcon={false}
+    >
+      <div className="relative z-10 transition-transform duration-200 group-hover:scale-110">
+        {isCameraOff ? <VideoOff className="w-5 h-5" /> : <Video className="w-5 h-5" />}
+      </div>
+    </TrackToggle>
+  )
+}
 
 const VideoRoomContent = () => {
   const [layoutMode, setLayoutMode] = useState<LayoutMode>('grid')
@@ -177,29 +218,9 @@ const VideoRoomContent = () => {
 
       {/* Controls */}
       <div className="relative z-50 flex items-center justify-center gap-2 sm:gap-3 px-4 py-4 border-t border-border/50 bg-card/50 backdrop-blur-sm">
-        <TrackToggle
-          source={Track.Source.Microphone}
-          className={cn(
-            "w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all",
-            "bg-secondary hover:bg-secondary/80 text-secondary-foreground",
-            "data-[lk-muted=true]:bg-destructive/90 data-[lk-muted=true]:text-destructive-foreground"
-          )}
-          showIcon={false}
-        >
-          <Mic className="w-5 h-5" />
-        </TrackToggle>
+        <MicToggleButton />
        
-        <TrackToggle
-          source={Track.Source.Camera}
-          className={cn(
-            "w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all",
-            "bg-secondary hover:bg-secondary/80 text-secondary-foreground",
-            "data-[lk-muted=true]:bg-destructive/90 data-[lk-muted=true]:text-destructive-foreground"
-          )}
-          showIcon={false}
-        >
-          <Video className="w-5 h-5" />
-        </TrackToggle>
+        <CameraToggleButton />
        
         <TrackToggle
           source={Track.Source.ScreenShare}

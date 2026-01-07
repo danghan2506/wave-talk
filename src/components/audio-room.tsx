@@ -98,6 +98,32 @@ const AudioParticipantTile = ({
 }
 
 
+const MicToggleButton = () => {
+  const tracks = useTracks([Track.Source.Microphone], { onlySubscribed: false })
+  const isMuted = !tracks.some(t => !t.publication?.isMuted)
+
+  return (
+    <TrackToggle
+      source={Track.Source.Microphone}
+      className={cn(
+        "w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all duration-200",
+        "bg-secondary hover:bg-secondary/80 text-secondary-foreground",
+        "font-semibold relative overflow-hidden group"
+      )}
+      showIcon={false}
+    >
+      <div className="relative z-10 transition-transform duration-200 group-hover:scale-110">
+        {isMuted ? (
+          <MicOff className="w-5 h-5" />
+        ) : (
+          <Mic className="w-5 h-5" />
+        )}
+      </div>
+    </TrackToggle>
+  )
+}
+
+
 const AudioRoomContent = () => {
   const participants = useParticipants()
   const { localParticipant } = useLocalParticipant()
@@ -140,23 +166,14 @@ const AudioRoomContent = () => {
 
 
       {/* Controls */}
-      <div className="relative z-50 flex items-center justify-center gap-3 px-4 py-4 border-t border-border/50 bg-card/50 backdrop-blur-sm">
-        <TrackToggle
-          source={Track.Source.Microphone}
-          className={cn(
-            "w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all",
-            "bg-secondary hover:bg-secondary/80 text-secondary-foreground",
-            "data-[lk-muted=true]:bg-destructive data-[lk-muted=true]:text-destructive-foreground"
-          )}
-          showIcon={false}
-        >
-          <Mic className="w-5 h-5" />
-        </TrackToggle>
+      <div className="relative z-50 flex items-center justify-center gap-4 px-4 py-4 border-t border-border/50 bg-card/50 backdrop-blur-sm">
+        <MicToggleButton />
        
         <DisconnectButton
           className={cn(
-            "w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all",
-            "bg-red-500 hover:bg-red-600 text-white"
+            "w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all duration-200",
+            "bg-red-500 hover:bg-red-600 active:bg-red-700 text-white",
+            "font-semibold hover:scale-110 relative overflow-hidden"
           )}
         >
           <PhoneOff className="w-5 h-5" />
