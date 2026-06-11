@@ -1,36 +1,144 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎙️ WaveTalk
 
-## Getting Started
+WaveTalk is a full-stack, real-time community communication platform inspired by Discord. It allows users to build communities (Servers), organize them into dedicated text, audio, or video channels, exchange direct messages, upload file attachments, and participate in low-latency WebRTC-based audio and video calls.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## ✨ Features
+
+- **🛡️ Secure Authentication**: Integration with **Clerk** supporting login, signup, social logins, and secure route protection.
+- **💬 Real-Time Text Chat**: Powered by **Socket.io** for instant messaging, complete with:
+  - Message creation, live editing, and soft-deletion.
+  - Image and file attachments (PDFs, docs, etc.).
+  - Emoji picker support.
+  - Real-time message status updates.
+- **🔊 Low-Latency Voice & Video**: WebRTC streaming powered by **LiveKit** enabling:
+  - Crystal-clear 48kHz stereo audio channels.
+  - Low-latency HD video call rooms.
+  - Speaker detection and active volume indicator states.
+- **👥 Direct Messaging (DMs)**: Establish 1-on-1 conversations between server members with full direct messaging support.
+- **🎨 Server & Channel Organization**:
+  - Create, customize, edit, and delete servers with custom icons.
+  - Organize servers into **Text**, **Audio**, and **Video** channels.
+  - Interactive server discovery and search filters.
+- **🔑 Member Role & Access Control**:
+  - Server invitation system via secure, unique invite links.
+  - Role-based permissions (`ADMIN`, `MODERATOR`, `GUEST`).
+  - Member management panel (Kick, Change Roles) for Admins.
+- **📁 Secure Media Uploads**: Built-in integration with **Uploadthing** for avatar, server icon, and chat attachment storage.
+- **✨ Clean UI & UX**: Modern desktop-inspired layout using a refined, responsive design, responsive sidebars, skeleton loaders, and modern animations.
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **Framework**: [Next.js 16 (App Router)](https://nextjs.org/) & [React 19](https://react.dev/)
+- **State Management**: [Zustand](https://zustand-demo.pmnd.rs/) (Client state) & [TanStack React Query v5](https://tanstack.com/query/latest) (Server state & caching)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) & [Radix UI Primitives](https://www.radix-ui.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Forms**: [React Hook Form](https://react-hook-form.com/) with [Zod Validation](https://zod.dev/)
+
+### Backend & Real-Time
+- **Server**: Next.js Server Actions & API Routes
+- **WebSockets**: [Socket.io](https://socket.io/) (via Next.js custom Socket routing)
+- **WebRTC**: [LiveKit React Components](https://livekit.io/) & LiveKit Server SDK
+
+### Database & Storage
+- **ORM**: [Prisma Client](https://www.prisma.io/)
+- **Database**: Serverless PostgreSQL via [Neon DB](https://neon.tech/)
+- **Storage**: [Uploadthing API](https://uploadthing.com/)
+
+---
+
+## 📂 Database Schema Overview
+
+The database models are designed using Prisma to represent servers, channels, direct communication, and roles:
+
+```mermaid
+erDiagram
+    Profile ||--o{ Server : "creates"
+    Profile ||--o{ Channel : "joins"
+    Profile ||--o{ Member : "represented as"
+    Server ||--o{ Member : "contains"
+    Server ||--o{ Channel : "groups"
+    Member ||--o{ Message : "sends"
+    Member ||--o{ DirectMessage : "sends"
+    Member ||--o{ Conversation : "initiates/receives"
+    Channel ||--o{ Message : "stores"
+    Conversation ||--o{ DirectMessage : "groups"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **`Profile`**: Links to authenticated Clerk users; contains general user metadata.
+- **`Server`**: Groups channels and members together. Owned by a Profile creator.
+- **`Member`**: Ties a `Profile` to a `Server` with a specific `MemberRole` (`ADMIN`, `MODERATOR`, `GUEST`).
+- **`Channel`**: A community stream belonging to a `Server` with a `ChannelType` (`TEXT`, `AUDIO`, `VIDEO`).
+- **`Message`**: Text chats sent in a text channel, supports attachments and soft deletes.
+- **`Conversation`**: Links two members in a direct messaging relationship.
+- **`DirectMessage`**: Messages sent inside private conversations.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Getting Started
 
-## Learn More
+### 📋 Prerequisites
+Make sure you have [Node.js](https://nodejs.org/) installed (v18.x or higher is recommended) alongside `npm`, `yarn`, `pnpm`, or `bun`.
 
-To learn more about Next.js, take a look at the following resources:
+### ⚙️ Installation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/wave-talk.git
+   cd wave-talk
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-## Deploy on Vercel
+3. **Configure Environment Variables:**
+   Copy the example environment template file and fill in your keys:
+   ```bash
+   cp .env.example .env
+   ```
+   Provide credentials for the following services:
+   - **Clerk Auth**: Keys from your Clerk Dashboard.
+   - **Neon Database**: A PostgreSQL connection string (`DATABASE_URL`).
+   - **Uploadthing**: Your API token for file uploads.
+   - **LiveKit Cloud**: API credentials and WebSocket URL for WebRTC rooms.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. **Initialize Database Schema:**
+   Generate the Prisma Client types and sync your PostgreSQL database:
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5. **Start the Development Server:**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
+
+---
+
+## 📦 Production & Deployment
+
+### Build the Application
+To compile an optimized production build:
+```bash
+npm run build
+```
+
+### Start the Server
+To run the built production server locally:
+```bash
+npm run start
+```
+
+### Linting
+To check and format the codebase:
+```bash
+npm run lint
+```

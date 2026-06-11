@@ -1,101 +1,84 @@
 import { SignIn } from '@clerk/nextjs'
+import Link from 'next/link'
 
 const SigninPage = () => {
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-slate-50 font-sans selection:bg-indigo-100 selection:text-indigo-700">
-      <div className="absolute top-0 -left-4 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
-      <div className="absolute top-0 -right-4 w-96 h-96 bg-cyan-300 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
-      <div className="absolute -bottom-8 left-20 w-96 h-96 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
-      <div className="absolute bottom-20 right-20 w-80 h-80 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-blob animation-delay-3000"></div>
-
-      <div className="relative z-10 flex flex-col items-center w-full max-w-[480px] p-8 sm:p-10 rounded-[2.5rem] 
-                      bg-white/30 backdrop-blur-3xl border border-white/50 
-                      shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] transition-all duration-300 hover:shadow-[0_8px_40px_0_rgba(31,38,135,0.1)]">
-        
-        <div className="flex flex-col items-center mb-8 space-y-2">
-          <div className="relative">
-             <h1 className="text-4xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 drop-shadow-sm">
-               WaveTalk
-             </h1>
-             <div className="absolute -inset-1 bg-gradient-to-r from-indigo-600/20 to-pink-600/20 blur-xl opacity-50 -z-10"></div>
-          </div>
-           <p className="text-slate-500 font-medium text-lg tracking-wide">
-             Connect properly.
-           </p>
-        </div>
-        <SignIn
-          signUpUrl="/sign-up"
-          forceRedirectUrl="/"
-          appearance={{
-            layout: {
-              socialButtonsPlacement: "bottom",
-              socialButtonsVariant: "blockButton",
-            },
-            variables: {
-              colorPrimary: "#4f46e5",
-              colorText: "#1e293b", // slate-800
-              colorTextSecondary: "#64748b", // slate-500
-              colorBackground: "transparent",
-              colorInputBackground: "rgba(255, 255, 255, 0.6)",
-              colorInputText: "#0f172a",
-              borderRadius: "1rem",
-              spacingUnit: "1rem",
-            },
-            elements: {
-              rootBox: "w-full",
-              card: "shadow-none border-none bg-transparent p-0 w-full",
-              headerTitle: "hidden", 
-              headerSubtitle: "hidden",
-              
-              // Social Buttons
-              socialButtonsBlockButton: 
-                "bg-white/70 border border-white/60 hover:bg-white/90 text-slate-600 font-medium transition-all duration-200 hover:scale-[1.01] hover:shadow-sm",
-              socialButtonsBlockButtonText: "font-semibold",
-              socialButtonsBlockButtonArrow: "hidden",
-              
-              // Divider
-              dividerLine: "bg-slate-200/80",
-              dividerText: "text-slate-400 font-medium uppercase text-xs tracking-wider",
-
-              // Form Fields
-              formFieldLabel: "text-slate-600 font-semibold ml-1 mb-1.5 text-sm",
-              formFieldInput: 
-                "bg-white/60 border border-slate-200/60 focus:bg-white focus:border-indigo-400 focus:ring-[3px] focus:ring-indigo-100 transition-all duration-200 pl-4 py-3",
-              
-              // Key Action Buttons
-              formButtonPrimary: 
-                "bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white shadow-lg shadow-indigo-500/30 border-none font-bold py-3 text-[15px] hover:scale-[1.02] transition-all duration-200 active:scale-[0.98]",
-              
-              // Footer - FORCE HIDE
-              footer: "hidden",
-              footerAction: "hidden",
-              footerActionLink: "hidden",
-              footerActionText: "hidden",
-              identityPreview: "hidden", // In case they are logged in context?
-            }
-          }}
-        />
-
-        {/* Custom Navigation Footer */}
-        <div className="mt-8 pt-6 border-t border-slate-200/50 w-full text-center">
-          <p className="text-slate-500 font-medium">
-            Don&apos;t have an account?{' '}
-            <a 
-              href="/sign-up" 
-              className="font-bold text-indigo-600 hover:text-indigo-500 transition-colors duration-200 cursor-pointer ml-1 relative group"
-            >
-              Sign up
-              <span className="absolute -bottom-0.5 left-0 w-full h-[2px] bg-indigo-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left"></span>
-            </a>
-          </p>
-        </div>
+    <div className="w-full bg-white border border-slate-200 rounded-3xl p-8 sm:p-10 shadow-xl shadow-slate-100/40">
+      <div className="flex flex-col space-y-1.5 mb-6 text-left">
+        <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+          Welcome back
+        </h2>
+        <p className="text-xs font-medium text-slate-500">
+          Enter your details below to sign in to your account
+        </p>
       </div>
-      
-      {/* Bottom Legal/Extra (Optional for Pro Max feel) */}
-      <p className="absolute bottom-6 text-slate-400 text-xs font-medium tracking-wide opacity-60 mix-blend-multiply">
-        © 2025 WaveTalk Inc. Secure & Encrypted.
-      </p>
 
+      <SignIn
+        signUpUrl="/sign-up"
+        forceRedirectUrl="/"
+        appearance={{
+          layout: {
+            socialButtonsPlacement: "bottom",
+            socialButtonsVariant: "blockButton",
+          },
+          variables: {
+            colorPrimary: "#4f46e5", // indigo-600
+            colorText: "#1e293b", // slate-800
+            colorTextSecondary: "#64748b", // slate-500
+            colorBackground: "transparent",
+            colorInputBackground: "#f8fafc", // slate-50
+            colorInputText: "#0f172a", // slate-900
+            borderRadius: "0.875rem",
+            spacingUnit: "0.95rem",
+          },
+          elements: {
+            rootBox: "w-full",
+            card: "shadow-none border-none bg-transparent p-0 w-full",
+            headerTitle: "hidden", 
+            headerSubtitle: "hidden",
+            
+            // Social Buttons
+            socialButtonsBlockButton: 
+              "bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-350 text-slate-700 transition-all duration-200 py-2.5 font-medium hover:scale-[1.01] shadow-sm",
+            socialButtonsBlockButtonText: "font-semibold text-xs text-slate-700",
+            socialButtonsBlockButtonArrow: "hidden",
+            
+            // Divider
+            dividerLine: "bg-slate-200/80",
+            dividerText: "text-slate-400 font-semibold text-[10px] uppercase tracking-wider",
+
+            // Form Fields
+            formFieldLabel: "text-slate-600 font-semibold text-xs mb-1.5 ml-0.5",
+            formFieldInput: 
+              "bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/10 text-slate-900 transition-all duration-200 pl-3.5 py-2.5 text-sm rounded-xl",
+            
+            // Key Action Buttons
+            formButtonPrimary: 
+              "bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 text-sm hover:shadow-[0_0_15px_rgba(79,70,229,0.3)] hover:scale-[1.01] transition-all duration-200 active:scale-[0.99] rounded-xl shadow-sm border-none",
+            
+            // Footer - FORCE HIDE
+            footer: "hidden",
+            footerAction: "hidden",
+            footerActionLink: "hidden",
+            footerActionText: "hidden",
+            identityPreview: "hidden",
+          }
+        }}
+      />
+
+      {/* Custom Navigation Footer */}
+      <div className="mt-6 pt-5 border-t border-slate-200/80 w-full text-center">
+        <p className="text-xs text-slate-500 font-medium">
+          Don&apos;t have an account?{' '}
+          <Link 
+            href="/sign-up" 
+            className="font-semibold text-indigo-600 hover:text-indigo-700 transition-colors duration-200 cursor-pointer ml-1 relative group"
+          >
+            Sign up
+            <span className="absolute -bottom-0.5 left-0 w-full h-[1.5px] bg-indigo-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-250 origin-left"></span>
+          </Link>
+        </p>
+      </div>
     </div>
   )
 }
