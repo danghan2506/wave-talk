@@ -131,6 +131,12 @@ To compile an optimized production build:
 npm run build
 ```
 
+For Docker builds, provide Clerk's publishable key as a build argument:
+```bash
+docker build --build-arg NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_... -t wave-talk .
+```
+Configure the same build argument in your deployment platform. Keep server secrets such as `CLERK_SECRET_KEY` in the platform's runtime environment variables; do not pass or commit them as Docker build arguments.
+
 ### Start the Server
 To run the built production server locally:
 ```bash
