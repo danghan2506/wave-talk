@@ -38,8 +38,9 @@ const ChatMessages = ({
   type,
 }: ChatMessagesProps) => {
   const queryKey = `chat:${chatId}`;
-  const addKey = `chat:${chatId}:message`;
-  const updateKey = `chat:${chatId}:message:update`;
+  // Phải khớp với key server emit: `chat:${channelId/conversationId}:messages`
+  const addKey = `chat:${chatId}:messages`;
+  const updateKey = `chat:${chatId}:messages:update`;
   const chatRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 

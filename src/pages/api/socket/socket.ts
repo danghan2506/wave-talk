@@ -7,9 +7,10 @@ export const config = {
         bodyParser: false
     }
 }
+// Setup Socket.IO server
 const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
     if(!res.socket.server.io){
-        const path = "/api/socket/socket"
+        const path = "/api/socket/socket" 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const httpServer: NetServer = res.socket.server as any
         const io = new ServerIO(httpServer, {

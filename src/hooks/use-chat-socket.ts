@@ -21,7 +21,7 @@ export const useChatSocket = ({addKey, updateKey, queryKey} : ChatSocketProps) =
     if (!socket) {
       return;
     }
-
+    //  Nhận tin nhắn được cập nhật
     socket.on(updateKey, (message: MessageWithMemberWithProfile) => {
       queryClient.setQueryData([queryKey], (oldData: any) => {
         if (!oldData || !oldData.pages || oldData.pages.length === 0) {
